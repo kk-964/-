@@ -9,8 +9,13 @@ export default function App() {
   const [fortune, setFortune] = useState(null);
   const cameraRef = useRef(null);
 
-  if (!permission) {
-    return <View />;
+  // ✅ 権限がnullの場合の処理を改善
+  if (permission === null) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: 'center' }}>権限を読み込み中...</Text>
+      </View>
+    );
   }
 
   if (!permission.granted) {
