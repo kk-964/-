@@ -1,5 +1,18 @@
 {
+  "name": "expo-apps-hub",
+  "version": "1.0.0",
+  "description": "Multiple Expo app projects for iOS/Android development",
+  "scripts": {
+    "start:final": "cd my-final-app && npm start",
+    "start:fortune": "cd my-fortune-app && npm start",
+    "start:new": "cd my-new-app && npm start",
+    "start:all": "bash start-all-expo.sh",
+    "install:all": "npm install && cd my-final-app && npm install && cd ../my-fortune-app && npm install && cd ../my-new-app && npm install"
+  },
   "dependencies": {
+    "@capacitor/camera": "^8.2.2",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
     "@google/generative-ai": "^0.24.1"
   }
 }
