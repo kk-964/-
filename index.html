@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI お部屋・持ち物 占い</title>
+  <style>
+    body { text-align: center; padding: 20px; font-family: sans-serif; background-color: #fce4ec; color: #333; }
+    /* カメラボタンのデザイン */
+    .camera-btn { display: inline-block; padding: 15px 30px; font-size: 18px; color: white; background-color: #e91e63; border-radius: 30px; cursor: pointer; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+    .camera-btn:hover { background-color: #c2185b; }
+    /* 本当のファイル選択ボタンは隠す */
+    input[type="file"] { display: none; }
+    
+    #preview { max-width: 100%; height: auto; border-radius: 10px; margin-top: 10px; display: none; border: 3px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    #result-box { margin-top: 20px; padding: 20px; background: white; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; }
+    .loading { color: #888; font-style: italic; font-weight: bold; animation: blink 1.5s infinite; }
+    
+    /* 点滅アニメーション */
+    @keyframes blink { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
+    
+    .fortune-title { font-size: 28px; font-weight: bold; color: #e91e63; }
+    .fortune-text { font-size: 18px; margin-top: 10px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <h1>🔮 AI 持ち物・お部屋占い</h1>
+  <p>あなたの持ち物や、今の部屋の写真を撮ってね！<br>写っているものの「オーラ」から運勢を占います。</p>
+
+  <!-- カメラ起動ボタン -->
+  <label class="camera-btn">
+    📸 写真を撮って占う！
+    <!-- capture="environment" でスマホの外側カメラを起動 -->
+    <input type="file" accept="image/*" capture="environment" id="cameraInput" onchange="analyzeImage()">
+  </label>
+
+  <!-- 撮影した写真を表示する場所 -->
+  <div>
+    <img id="preview" alt="撮影した写真">
+  </div>
+
+  <!-- 占い結果を表示する場所 -->
+  <div id="result-box">
+    <p id="loadingMessage" class="loading">✨ AIがオーラを分析中... ✨</p>
+    <div id="fortuneResult" style="display: none;">
+      <div class="fortune-title" id="fTitle"></div>
+      <div class="fortune-text" id="fText"></div>
+    </div>
+  </div>
+
+  <script>
+    function analyzeImage() {
+      const fileInput = document.getElementById('cameraInput');
+      const preview = document.getElementById('preview');
+      const resultBox = document.getElementById('result-box');
+      const loadingMsg = document.getElementById('loadingMessage');
+      const fortuneResult = document.getElementById('fortuneResult');
+      const fTitle = document.getElementById('fTitle');
+      const fText = document.getElementById('fText');
+
+      // 写真が選ばれていなければ何もしない
+      if (!fileInput.files || fileInput.files.length === 0) return;
+
+      // 撮影した写真を画面に表示する
+      const file = fileInput.files[0];
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'inline-block';
+
+      // 分析中のメッセージを出す
+      resultBox.style.display = 'block';
+      loadingMsg.style.display = 'block';
+      fortuneResult.style.display = 'none';
+
+      // 占い結果のリスト
+      const results = [
+        { title: "大吉 🌟", text: "写真から素晴らしいエネルギーを感じます！今日は新しいことに挑戦すると大成功するかも。" },
+        { title: "中吉 ✨", text: "とても整理された良い運気です。今日は懐かしい人に連絡をとってみると、良い知らせが舞い込みそう。" },
+        { title: "吉 🍀", text: "落ち着いた雰囲気が出ています。今日は無理をせず、自分のペースで過ごすと運気がアップします。" },
+        { title: "開運の兆し 🚀", text: "パワーが少し滞っているかも？でも大丈夫、不要なものを1つ捨てるだけで、明日から劇的に運気が上がりますよ！" }
+      ];
+
+      // 2秒後にランダムな結果を出す（AIが分析している演出）
+      setTimeout(() => {
+        const random = Math.floor(Math.random() * results.length);
+        fTitle.innerText = results[random].title;
+        fText.innerText = results[random].text;
+        
+        loadingMsg.style.display = 'none';
+        fortuneResult.style.display = 'block';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
